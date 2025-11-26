@@ -5,39 +5,3 @@ generator client {
 datasource db {
   provider = "mysql"
 }
-
-model Dokter {
-  id            String   @id @default(uuid())
-  nama          String
-  spesialis     String
-  jenis_kelamin String
-  handphone     String
-  alamat        String
-  status        Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  jadwal_dokter Jadwal_Dokter[]
-}
-
-model Jadwal_Dokter {
-  id            String   @id @default(uuid())
-  dokterId      String
-  hari          Hari
-  jam_mulai     String
-  jam_selesai   String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  dokter        Dokter   @relation(fields: [dokterId], references: [id])
-}
-
-enum Hari {
-  senin
-  selasa
-  rabu
-  kamis
-  jumat
-  sabtu
-  minggu
-}
