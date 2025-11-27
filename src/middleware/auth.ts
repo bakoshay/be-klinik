@@ -4,7 +4,7 @@ import jwt from '@elysiajs/jwt'
 export const jwtPlugin = jwt({
   name: 'jwt',
   secret: process.env.JWT_SECRET || 'your-secret-key',
-  exp: '2h', // Token expired dalam 2 jam
+  exp: '1h', // Token expired dalam 1 jam
 })
 
 export const authMiddleware = (app: Elysia) =>
