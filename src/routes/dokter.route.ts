@@ -5,10 +5,43 @@ import {
   createDokterSchema,
   updateDokterSchema,
 } from "../schemas/dokter.schema";
-import type {Dokter} from '../types/dokter'
+import { authMiddleware } from '../middleware/auth'
+import type { Dokter } from '../types/dokter'
 
-export const dokterRoute = new Elysia({ prefix: "/dokters" })
+export const publicDokterRoute = new Elysia({ prefix: "/dokters" })
+// GET BY DAY
+  .get("/hari", async ({ query }) => {
+  const day = query.day as string;
 
+  if (!day) {
+    return error("Parameter 'hari' wajib diisi", 400);
+  }
+
+  // Validasi hari agar sesuai enum Hari
+  const validDays = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
+  if (!validDays.includes(day.toLowerCase())) {
+    return error("Hari tidak valid", 400);
+  }
+
+  const list = await prisma.dokter.findMany({
+    where: {
+      jadwal_dokter: {
+        some: { hari: day as any },
+      }
+    },
+    include: {
+      jadwal_dokter: {
+        where: { hari: day as any}
+      }
+    },
+    orderBy: { nama: "asc" },
+  });
+
+  return success(`Daftar dokter untuk hari ${day}`, list);
+  })
+
+export const privateDokterRoute = new Elysia({ prefix: "/dokters" })
+  .use(authMiddleware)
   // CREATE
   .post(
     "/",
@@ -70,37 +103,6 @@ export const dokterRoute = new Elysia({ prefix: "/dokters" })
 
     return success("Detail dokter ditemukan", dokter);
   })
-
-  // GET BY DAY
-  .get("/hari", async ({ query }) => {
-  const day = query.day as string;
-
-  if (!day) {
-    return error("Parameter 'hari' wajib diisi", 400);
-  }
-
-  // Validasi hari agar sesuai enum Hari
-  const validDays = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
-  if (!validDays.includes(day.toLowerCase())) {
-    return error("Hari tidak valid", 400);
-  }
-
-  const list = await prisma.dokter.findMany({
-    where: {
-      jadwal_dokter: {
-        some: { hari: day as any },
-      }
-    },
-    include: {
-      jadwal_dokter: {
-        where: { hari: day as any}
-      }
-    },
-    orderBy: { nama: "asc" },
-  });
-
-  return success(`Daftar dokter untuk hari ${day}`, list);
-})
 
   // UPDATE
   .put(
