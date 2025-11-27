@@ -4,11 +4,11 @@ import jwt from '@elysiajs/jwt'
 export const jwtPlugin = jwt({
   name: 'jwt',
   secret: process.env.JWT_SECRET || 'your-secret-key',
-  exp: '1h', // Token expired dalam 1 jam
+  exp: '2h', // HAPUS baris ini agar token tidak expired
 })
 
 export const authMiddleware = (app: Elysia) =>
-  app.use(jwtPlugin).onBeforeHandle(async ({ jwt, set, request, store }) => {
+  app.use(jwtPlugin).onBeforeHandle(async ({ jwt, set, request }) => {
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
       set.status = 401
