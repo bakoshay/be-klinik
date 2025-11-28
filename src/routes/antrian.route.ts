@@ -54,6 +54,8 @@ export const publicAntrianRoute = new Elysia({ prefix: "/antrians" })
       }
     });
 
+    await broadcastCurrentAntrian();
+
     const nomor_format = `U-${String(nextNumber).padStart(2, "0")}`;
 
     return success("Antrian berhasil dibuat", {
