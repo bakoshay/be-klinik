@@ -6,6 +6,7 @@ import {
   updateDokterSchema,
 } from "../schemas/dokter.schema";
 import { authMiddleware } from '../middleware/auth'
+import {isValidDay, mapSchedules} from '../utils/dokter'
 import type { Dokter } from '../types/dokter'
 
 export const publicDokterRoute = new Elysia({ prefix: "/dokters" })
@@ -18,8 +19,7 @@ export const publicDokterRoute = new Elysia({ prefix: "/dokters" })
   }
 
   // Validasi hari agar sesuai enum Hari
-  const validDays = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
-  if (!validDays.includes(day.toLowerCase())) {
+  if (!isValidDay(day)) {
     return error("Hari tidak valid", 400);
   }
 
@@ -57,11 +57,7 @@ export const privateDokterRoute = new Elysia({ prefix: "/dokters" })
           status: data.is_active,
 
           jadwal_dokter: {
-            create: data.schedules.map((s: any) => ({
-              hari: s.day,
-              jam_mulai: s.start,
-              jam_selesai: s.end,
-            })),
+            create: mapSchedules(data.schedules),
           },
         },
         include: { jadwal_dokter: true },
