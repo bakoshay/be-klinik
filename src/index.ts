@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import {privateDokterRoute, publicDokterRoute} from './routes/dokter.route'
-import { publicAntrianRoute, privateAntrianRoute, antrianWebSocket } from './routes/antrian.route'
+import { publicAntrianRoute, privateAntrianRoute } from './routes/antrian.route'
+import {antrianWebSocket} from './routes/antrian.ws.routes'
 import { authRoute } from './routes/auth.route'
 import { cors } from '@elysiajs/cors'
 import {jwtPlugin} from './middleware/auth'
