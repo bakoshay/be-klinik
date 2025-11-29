@@ -28,7 +28,6 @@ export const privateObatRoute = new Elysia({ prefix: "/obats" })
       where: {
         OR: [
           { nama: { contains: search}},
-          { jenis: { equals: search as any } },
         ]
       },
       orderBy: { nama: "desc" },
