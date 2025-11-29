@@ -37,9 +37,16 @@ export const privateObatRoute = new Elysia({ prefix: "/obats" })
   })
 
   // GET OBAT BY STATUS (TRUE)
-  .get("/available", async () => {
+  .get("/available", async ({query}) => {
+    const search = query.search ?? '';
+
     const list = await prisma.obat.findMany({
-      where: { status: true },
+      where: {
+        status: true,
+        OR: [
+          { nama: { contains: search}},
+        ]
+      },
       orderBy: { nama: "desc" },
     })
 
