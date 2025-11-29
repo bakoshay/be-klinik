@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia';
 import {privateDokterRoute, publicDokterRoute} from './routes/dokter.route'
+import { privateObatRoute } from './routes/obat.route'
 import { publicAntrianRoute, privateAntrianRoute } from './routes/antrian.route'
 import {antrianWebSocket} from './routes/antrian.ws.routes'
 import { authRoute } from './routes/auth.route'
@@ -22,6 +23,7 @@ app
   .use(publicAntrianRoute)
   .use(privateAntrianRoute)
   .use(antrianWebSocket(app))
+  .use(privateObatRoute)
   .use(publicDokterRoute)
   .use(privateDokterRoute)
   .listen({ port });
