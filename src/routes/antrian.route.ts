@@ -84,6 +84,35 @@ export const privateAntrianRoute = new Elysia({ prefix: "/antrians" })
       });
   })
 
+  // Ambil all antrian hari ini
+  .get("/today", async () => {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const todayEnd = new Date();
+      todayEnd.setHours(23, 59, 59, 999);
+
+      const list = await prisma.antrian.findMany({
+        where: {
+          tanggal: {
+            gte: todayStart,
+            lte: todayEnd
+          }
+        },
+        orderBy: { nomor: "asc" },
+        include: { pasien: true }
+      });
+
+      const formattedList = list.map(item => ({
+        id: item.id,
+        nomor: formatNomorAntrian(item.prefix, item.nomor),
+        pasien: item.pasien.nama,
+        status: item.status
+      }));
+
+      return success("Daftar antrian hari ini", formattedList);
+  })
+
   // NEXT antrian (selesaikan antrian sekarang, ambil berikutnya)
   .post("/next", async () => {
       const current = await getCurrentAntrian();
