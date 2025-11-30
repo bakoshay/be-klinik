@@ -3,6 +3,7 @@ import {privateDokterRoute, publicDokterRoute} from './routes/dokter.route'
 import { privateObatRoute } from './routes/obat.route'
 import { publicAntrianRoute, privateAntrianRoute } from './routes/antrian.route'
 import {antrianWebSocket} from './routes/antrian.ws.routes'
+import { privatePembayaranRoute } from './routes/pembayaran.route'
 import { authRoute } from './routes/auth.route'
 import { cors } from '@elysiajs/cors'
 import {jwtPlugin} from './middleware/auth'
@@ -24,6 +25,7 @@ app
   .use(privateAntrianRoute)
   .use(antrianWebSocket(app))
   .use(privateObatRoute)
+  .use(privatePembayaranRoute)
   .use(publicDokterRoute)
   .use(privateDokterRoute)
   .listen({ port });
