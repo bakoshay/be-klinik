@@ -21,8 +21,19 @@ export const getLastTodayAntrian = async () => {
 
 // Mengambil antrian sekarang (yang sedang menunggu dipanggil)
 export const getCurrentAntrian = async () => {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
   return prisma.antrian.findFirst({
-    where: { status: false },
+    where: {
+      status: false,
+      tanggal: {
+        gte: todayStart,
+        lte: todayEnd
+      }
+    },
     orderBy: { nomor: "asc" },
     include: { pasien: true }
   });
