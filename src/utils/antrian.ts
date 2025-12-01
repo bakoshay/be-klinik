@@ -41,9 +41,18 @@ export const getCurrentAntrian = async () => {
 
 // Mengambil daftar antrian berikutnya setelah nomor saat ini
 export const getNextAntrianList = async (currentNomor: number | null) => {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
   return prisma.antrian.findMany({
     where: {
       status: false,
+      tanggal: {
+        gte: todayStart,
+        lte: todayEnd
+      },
       ...(currentNomor && { nomor: { gt: currentNomor } })
     },
     orderBy: { nomor: "asc" },
