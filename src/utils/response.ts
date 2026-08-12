@@ -1,4 +1,4 @@
-export const success = (message: string, data?: any) => ({
+export const success = (message: string, data?: unknown) => ({
   status: true,
   message,
   data
