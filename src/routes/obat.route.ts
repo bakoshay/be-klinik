@@ -57,7 +57,6 @@ export const privateObatRoute = new Elysia({ prefix: "/obats" })
   .put(
     "/:id",
     async ({ params, body }) => {
-      const id = params.id;
       const data = body as Obat
       
       const exists = await prisma.obat.findUnique({

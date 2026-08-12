@@ -7,7 +7,8 @@ import {
 } from "../schemas/dokter.schema";
 import { authMiddleware } from '../middleware/auth'
 import {isValidDay, mapSchedules} from '../utils/dokter'
-import type { Dokter } from '../types/dokter'
+import type { Dokter, Schedule } from '../types/dokter'
+import type { Hari } from '@prisma/client'
 
 export const publicDokterRoute = new Elysia({ prefix: "/dokters" })
 // GET BY DAY
@@ -26,12 +27,12 @@ export const publicDokterRoute = new Elysia({ prefix: "/dokters" })
   const list = await prisma.dokter.findMany({
     where: {
       jadwal_dokter: {
-        some: { hari: day as any },
+        some: { hari: day as Hari },
       }
     },
     include: {
       jadwal_dokter: {
-        where: { hari: day as any}
+        where: { hari: day as Hari}
       }
     },
     orderBy: { nama: "asc" },
@@ -131,9 +132,9 @@ export const privateDokterRoute = new Elysia({ prefix: "/dokters" })
         });
 
         await prisma.jadwal_Dokter.createMany({
-          data: data.schedules.map((s: any) => ({
+          data: data.schedules.map((s: Schedule) => ({
             dokterId: params.id,
-            hari: s.day,
+            hari: s.day as Hari,
             jam_mulai: s.start,
             jam_selesai: s.end,
           })),

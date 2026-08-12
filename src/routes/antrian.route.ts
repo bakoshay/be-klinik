@@ -42,7 +42,7 @@ export const publicAntrianRoute = new Elysia({ prefix: "/antrians" })
       orderBy: { nomor: "desc" }
     });
 
-    let nextNumber = last ? last.nomor + 1 : 1;
+    const nextNumber = last ? last.nomor + 1 : 1;
 
     await prisma.antrian.create({
       data: {
