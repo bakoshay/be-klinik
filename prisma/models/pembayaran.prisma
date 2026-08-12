@@ -1,0 +1,31 @@
+enum MetodeBayar {
+  cash
+  qris
+}
+
+model Pembayaran {
+  id            String        @id @default(uuid())
+  pasien        String
+  biaya_layanan Int
+  jumlah_bayar  Int
+  kembalian     Int?
+  metode        MetodeBayar
+  sub_total     Int
+  total         Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  detail_obat   DetailObatPembayaran[]
+}
+
+model DetailObatPembayaran {
+  id           String      @id @default(uuid())
+  pembayaranId String
+  obatId       String
+  nama         String
+  harga        Int
+  qty          Int
+  total        Int
+
+  pembayaran   Pembayaran  @relation(fields: [pembayaranId], references: [id])
+}

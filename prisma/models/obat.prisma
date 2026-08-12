@@ -1,0 +1,15 @@
+enum Jenis_Obat {
+  tablet
+  kapsul
+  kaplet
+}
+
+model Obat {
+  id        String     @id @default(uuid())
+  nama      String
+  jenis     Jenis_Obat
+  harga     Int
+  status    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
