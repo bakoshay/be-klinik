@@ -11,7 +11,7 @@ async function main() {
     update: {},
     create: {
       name: 'Super Admin',
-      username: 'superuser',
+      username: 'admin',
       password,
     },
   });
